@@ -20,6 +20,9 @@ def loc_sommaire(doc):
         
 
 
+"""
+    extrait les textes et la taille des textes avec pdfminer
+"""
 def extract_fontsize(path, page_id):
     Extract_Data=[]
     doc = extract_pages(path)
@@ -51,12 +54,14 @@ def extract_fontsize(path, page_id):
     return corrected_data
 
 
-
+"""
+    retourne les textes mis en valeur (taille plus grand que la police normale), 
+    on considère que c'est le titre
+"""
 def get_titles(data):
     tab_size = [col[0] for col in data]
     collec_size = dict(Counter(tab_size))
     most_common_size = max(collec_size, key=collec_size.get)
-
 
     for i in collec_size.copy():
         if i < most_common_size:
@@ -76,6 +81,10 @@ def get_titles(data):
                 titles.append(x[1].strip())
     return titles
 
+
+"""
+    utilise fitz de pymuPDF pour mettre les textes dans un tableau
+"""
 def pdfto_array_fitz(pdf):
     document  = fitz.open(pdf) 
     fitz_txt = []
@@ -85,8 +94,15 @@ def pdfto_array_fitz(pdf):
     return fitz_txt
 
 
+"""
+    génère et retourne les parties du sommaire dans un tableau
+"""
+def gen_sommaire(document, som_page):
+    # récupère le texte du sommaire
+    txt = document[som_page].get_text()
+    txt = unidecode.unidecode(txt)
+    txt = txt.replace('\n', ' ').replace('  ', ' ')
 
-def gen_sommaire():
     # titre , page
     sommaire = []
     for title in titles:
@@ -103,7 +119,10 @@ def gen_sommaire():
     return sommaire
 
 
-def gen_pdf(sommaire):
+"""
+    génère les pdf pour chaque parties du sommaire
+"""
+def gen_pdf(sommaire, document):
     # file_name = './pdf_split/test.pdf'
     for x in range(len(sommaire)):
         from_p = sommaire[x][1]+1       # 2 premieres pages ne comptent pas
@@ -118,17 +137,17 @@ def gen_pdf(sommaire):
 
 
 
+
 pdf = "./U_record/TF1_2020.pdf"
-# document = extract_pages(pdf)
 document  = fitz.open(pdf) 
 
 som_page = loc_sommaire(document)[0]
 tab_fontsize = extract_fontsize(pdf, som_page)
 titles = get_titles(tab_fontsize)
+sommaire = gen_sommaire(document, som_page-1)
+gen_pdf(sommaire, document)
 
 
-txt = document[som_page-1].get_text()
-txt = unidecode.unidecode(txt)
-txt = txt.replace('\n', ' ').replace('  ', ' ')
-sommaire = gen_sommaire()
-gen_pdf(sommaire)
+# doc2 = fitz.open()
+# doc2.insert_pdf(document, from_page = 141, to_page = 143, start_at = 0)
+# doc2.save("./pdf_split/"+ "test" +".pdf")
