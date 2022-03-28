@@ -61,15 +61,24 @@ def extract_tables(doc):
         df = df.rename(columns={df.columns[0]: 'description'})
         dw = pd.concat([dw, df], ignore_index=True, sort=False)
 
-        print(df, '\n\n')
-    print(datalake)
-    print(dw)
+        # print(df, '\n\n')
+
+    # print(datalake)
+    # print(dw)
     # datalake.to_csv('./datalake.csv', index = False)
     datalake.to_excel('./datalake.xlsx')
+    print("datalake.csv généré")
     dw.to_excel('./dw.xlsx')
+    print("dw.csv généré")
 
-pdf = "./test.pdf"
-# pdf = "./pdf_split/4 DECLARATION DE PERFORMANCE EXTRA-FINANCIERE.pdf"
-gen_docx(pdf, "test.docx")
-doc = './gen_docx/test.docx'
-extract_tables(doc)
+    return datalake, dw
+
+
+
+# pdf = "./test.pdf"
+# # pdf = "./pdf_split/4 DECLARATION DE PERFORMANCE EXTRA-FINANCIERE.pdf"
+# gen_docx(pdf, "test.docx")
+# doc = './gen_docx/test.docx'
+# dl, dw = extract_tables(doc)
+# print(dl)
+# print(dw)

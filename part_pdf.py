@@ -97,7 +97,7 @@ def pdfto_array_fitz(pdf):
 """
     génère et retourne les parties du sommaire dans un tableau
 """
-def gen_sommaire(document, som_page):
+def gen_sommaire(document, som_page, titles):
     # récupère le texte du sommaire
     txt = document[som_page].get_text()
     txt = unidecode.unidecode(txt)
@@ -138,14 +138,14 @@ def gen_pdf(sommaire, document):
 
 
 
-pdf = "./U_record/TF1_2020.pdf"
-document  = fitz.open(pdf) 
+# pdf = "./U_record/TF1_2020.pdf"
+# document  = fitz.open(pdf) 
 
-som_page = loc_sommaire(document)[0]
-tab_fontsize = extract_fontsize(pdf, som_page)
-titles = get_titles(tab_fontsize)
-sommaire = gen_sommaire(document, som_page-1)
-gen_pdf(sommaire, document)
+# som_page = loc_sommaire(document)[0]
+# tab_fontsize = extract_fontsize(pdf, som_page)
+# titles = get_titles(tab_fontsize)
+# sommaire = gen_sommaire(document, som_page-1, titles)
+# gen_pdf(sommaire, document)
 
 
 # doc2 = fitz.open()
